@@ -7,7 +7,7 @@
 
         <variable
             name="issueDetail"
-            type="com.turtlemint.assignment.domain.response.listing_response.IssuesResponse" />
+            type="com.turtlemint.assignment.domain.response.IssuesDetailsResponse" />
     </data>
 
 

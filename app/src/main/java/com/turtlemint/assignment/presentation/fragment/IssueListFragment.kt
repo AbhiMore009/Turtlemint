@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -14,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.turtlemint.assignment.R
 import com.turtlemint.assignment.databinding.FragmentIssueListBinding
-import com.turtlemint.assignment.domain.response.listing_response.IssuesResponse
+import com.turtlemint.assignment.domain.response.IssuesResponse
 import com.turtlemint.assignment.presentation.adapter.IssueListAdapter
 import com.turtlemint.assignment.utils.Constants.ISSUE_RESPONSE
 import com.turtlemint.assignment.utils.NetworkResult
@@ -36,7 +37,7 @@ class IssueListFragment : Fragment() {
         _binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_issue_list, container, false
         )
-        return binding!!.root
+        return binding.root
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,12 +49,12 @@ class IssueListFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        binding!!.lifecycleOwner = this
+        binding.lifecycleOwner = this
 
-        binding!!.recList.layoutManager =
+        binding.recList.layoutManager =
             LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
         adapter = IssueListAdapter(::onIssueClicked)
-        binding!!.recList.adapter = adapter
+        binding.recList.adapter = adapter
 
         bindObservers()
     }
@@ -72,17 +73,24 @@ class IssueListFragment : Fragment() {
 
     private fun bindObservers() {
         viewModel.listResponseLiveData.observe(viewLifecycleOwner, Observer {
-            binding!!.progressBar.isVisible = false
+            binding.progressBar.isVisible = false
             when (it) {
                 is NetworkResult.Success -> {
-                    adapter.submitList(it.data)
+                    adapter.submitList(it.data as MutableList<IssuesResponse>)
 
                 }
                 is NetworkResult.Error -> {
-                    //show error
+                    if(it.message.equals(getString(R.string.no_internet_connection)))
+                    {
+                        binding.tvError.isVisible=true
+                        binding.tvError.text=it.message
+                    }
+                    else{
+                        Toast.makeText(this.context,it.message,Toast.LENGTH_SHORT).show()
+                    }
                 }
                 is NetworkResult.Loading -> {
-                    binding!!.progressBar.isVisible = true
+                    binding.progressBar.isVisible = true
                 }
             }
         })

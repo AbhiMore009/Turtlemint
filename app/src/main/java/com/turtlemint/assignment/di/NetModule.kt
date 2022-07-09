@@ -1,6 +1,5 @@
 package com.turtlemint.assignment.di
 
-import com.turtlemint.assignment.data.repo.AuthInterceptor
 import com.turtlemint.assignment.data.repo.IssueApi
 import com.turtlemint.assignment.utils.Constants
 import dagger.Module
@@ -19,7 +18,7 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    fun providesRetrofit(okHttpClient : OkHttpClient): Retrofit.Builder {
+    fun providesRetrofit(okHttpClient: OkHttpClient): Retrofit.Builder {
         return Retrofit.Builder().baseUrl(Constants.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())

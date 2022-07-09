@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.turtlemint.assignment.databinding.RecListItemBinding
-import com.turtlemint.assignment.domain.response.listing_response.IssuesResponse
+import com.turtlemint.assignment.domain.response.IssuesResponse
 
 
 class IssueListAdapter(private val onNoteClicked: (IssuesResponse) -> Unit) :
@@ -28,7 +28,7 @@ class IssueListAdapter(private val onNoteClicked: (IssuesResponse) -> Unit) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(issuesResponse: IssuesResponse) {
-            binding.issuesResponse=issuesResponse
+            binding.issuesResponse = issuesResponse
             binding.root.setOnClickListener {
                 onNoteClicked(issuesResponse)
             }
